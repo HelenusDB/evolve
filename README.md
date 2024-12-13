@@ -1,6 +1,6 @@
 # HelenusDB Evolve
 
-** Cassandra Schema Evolution for Java **
+**Cassandra Schema Evolution for Java**
 
 Usage:
 ```
