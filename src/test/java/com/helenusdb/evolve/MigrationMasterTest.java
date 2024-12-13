@@ -22,15 +22,15 @@ public class MigrationMasterTest
 	public void testMigrate()
 	throws IOException
 	{
-		CassandraEvolve migration = new CassandraEvolve();
+		CassandraEvolve evolve = new CassandraEvolve();
 
 		// manipulate the migration configuration to use the same keyspace as the CassandraManager (otherwise, we'd have to create a new 'migrations' keyspace).
-		MigrationConfiguration config = migration.getConfiguration();
+		MigrationConfiguration config = evolve.getConfiguration();
 		config.setKeyspace(CassandraManager.keyspace());
-		migration.setConfiguration(config);
+		evolve.setConfiguration(config);
 
 		// perform the migration.
-		migration.migrate(CassandraManager.session());
+		evolve.migrate(CassandraManager.session());
 		assertTrue(true);
 	}
 }

@@ -25,4 +25,6 @@ create table if not exists example.table (
 )
 with clustering order by (installed_at DESC, version DESC);
 ```
+## Operations
 
+Evolve creates metadata to track and orchestrate schema migrations. By default that table is in 

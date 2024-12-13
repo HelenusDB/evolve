@@ -7,9 +7,8 @@ import org.apache.thrift.transport.TTransportException;
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 
 import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Metadata;
 import com.datastax.oss.driver.api.core.CqlSession;
-import com.datastax.oss.driver.api.core.session.Session;
-import com.helenusdb.evolve.metadata.Metadata;
 
 /**
  * @author tfredrich
@@ -43,7 +42,7 @@ public class CassandraManager
 	    return INSTANCE._cluster();
     }
 
-	public static Session session()
+	public static CqlSession session()
 	{
 		return INSTANCE._session();
 	}
@@ -68,7 +67,7 @@ public class CassandraManager
 		throw new IllegalStateException("Call CassandraManager.start() before accessing cluster");		
 	}
 
-	private Session _session()
+	private CqlSession _session()
 	{
 		if (isStarted)
 		{
@@ -108,7 +107,7 @@ public class CassandraManager
 				.build();
 		}
 
-		session = cluster.connect();
+		session = (CqlSession) cluster.connect();
 		metadata = cluster.getMetadata();
 		initializeKeyspace(session);
 		isStarted = true;
