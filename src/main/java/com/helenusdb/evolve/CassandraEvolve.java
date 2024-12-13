@@ -19,9 +19,9 @@ import com.helenusdb.evolve.metadata.MetadataStrategy;
 /**
  * Manages the migration of a Cassandra database.
  */
-public class HelenusDbEvolve
+public class CassandraEvolve
 {
-	private static final Logger LOG = LoggerFactory.getLogger(HelenusDbEvolve.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CassandraEvolve.class);
 
 	private static final int UNINITIALIZED = -1;
 
@@ -32,7 +32,7 @@ public class HelenusDbEvolve
 	/**
 	 * Manage migrations using the default configuration.
 	 */
-	public HelenusDbEvolve()
+	public CassandraEvolve()
 	{
 		this(new MigrationConfiguration());
 	}
@@ -42,7 +42,7 @@ public class HelenusDbEvolve
 	 * 
 	 * @param configuration
 	 */
-	public HelenusDbEvolve(MigrationConfiguration configuration)
+	public CassandraEvolve(MigrationConfiguration configuration)
 	{
 		super();
 		setConfiguration(configuration);
@@ -59,13 +59,13 @@ public class HelenusDbEvolve
 		return configuration;
 	}
 
-	public HelenusDbEvolve register(Migration migration)
+	public CassandraEvolve register(Migration migration)
 	{
 		migrations.add(migration);
 		return this;
 	}
 
-	public HelenusDbEvolve registerAll(Collection<Migration> migrations)
+	public CassandraEvolve registerAll(Collection<Migration> migrations)
 	{
 		this.migrations.addAll(migrations);
 		return this;

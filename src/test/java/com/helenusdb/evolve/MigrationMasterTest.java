@@ -22,7 +22,7 @@ public class MigrationMasterTest
 	public void testMigrate()
 	throws IOException
 	{
-		HelenusDbEvolve migration = new HelenusDbEvolve();
+		CassandraEvolve migration = new CassandraEvolve();
 
 		// manipulate the migration configuration to use the same keyspace as the CassandraManager (otherwise, we'd have to create a new 'migrations' keyspace).
 		MigrationConfiguration config = migration.getConfiguration();

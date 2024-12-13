@@ -1,9 +1,10 @@
-Cassandra Schema Evolution for Java
-===================================
+# HelenusDB Evolve
+
+** Cassandra Schema Evolution for Java **
 
 Usage:
 ```
-	MigrationMaster migrations = new MigrationMaster();
+	CassandraEvolve migrations = new CassandraEvolve();
 	migrations.migrate(session);
 ```
 
@@ -24,4 +25,4 @@ create table if not exists example.table (
 )
 with clustering order by (installed_at DESC, version DESC);
 ```
-# evolve
+
