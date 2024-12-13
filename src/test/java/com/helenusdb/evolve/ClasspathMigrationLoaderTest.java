@@ -9,11 +9,6 @@ import java.util.Collection;
 
 import org.junit.Test;
 
-import com.helenusdb.evolve.ClasspathMigrationLoader;
-import com.helenusdb.evolve.Migration;
-import com.helenusdb.evolve.MigrationConfiguration;
-import com.helenusdb.evolve.ScriptMigration;
-
 public class ClasspathMigrationLoaderTest
 {
 	@Test

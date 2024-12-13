@@ -1,9 +1,10 @@
 package com.helenusdb.evolve.metadata;
 
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Session;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.core.cql.Row;
+import com.datastax.oss.driver.api.core.session.Session;
 import com.helenusdb.evolve.MigrationConfiguration;
 import com.helenusdb.evolve.MigrationException;
 
@@ -22,19 +23,19 @@ implements MetadataStrategy
 		this.config = configuration;
 	}
 
-	public boolean exists(Session session)
+	public boolean exists(CqlSession session)
 	{
-		ResultSet rs = session.execute(String.format("select count(*) from system_schema.tables where keyspace_name='%s' and table_name='%s'", session.getLoggedKeyspace(), config.getMetadataTable()));
+		ResultSet rs = session.execute(String.format("select count(*) from system_schema.tables where keyspace_name='%s' and table_name='%s'", session.getKeyspace(), config.getMetadataTable()));
 		return (rs.one().getLong(0) > 0);
 	}
 
-	public int getCurrentVersion(Session session)
+	public int getCurrentVersion(CqlSession session)
 	{
-		ResultSet rs = session.execute(String.format("select version from %s.%s where name = %s limit 1", session.getLoggedKeyspace(), config.getMetadataTable(), MIGRATIONS_KEY));
+		ResultSet rs = session.execute(String.format("select version from %s.%s where name = %s limit 1", session.getKeyspace(), config.getMetadataTable(), MIGRATIONS_KEY));
 		return rs.one().getInt(0);
 	}
 
-	public void initialize(Session session)
+	public void initialize(CqlSession session)
 	{
 		ResultSet rs = session.execute(String.format("create table if not exists %s.%s (" +
 			"name text," +
@@ -67,7 +68,7 @@ implements MetadataStrategy
 		}
 	}
 
-	public void update(Session session, Metadata metadata)
+	public void update(CqlSession session, Metadata metadata)
 	{
 		if (updateStatement == null)
 		{
@@ -83,7 +84,7 @@ implements MetadataStrategy
 		}
 	}
 
-	public boolean acquireLock(Session session)
+	public boolean acquireLock(CqlSession session)
 	{
 		PreparedStatement ps = session.prepare(String.format("insert into %s.%s_lock (name, locked_at) values (?, ?) if not exists",
 			config.getKeyspace(), config.getMetadataTable()));
@@ -92,7 +93,7 @@ implements MetadataStrategy
 		return rs.wasApplied();
 	}
 
-	public boolean isLocked(Session session)
+	public boolean isLocked(CqlSession session)
 	{
 		if (this.lockCheckStatement == null)
 		{
@@ -106,7 +107,7 @@ implements MetadataStrategy
 		return (row.getInt(0) > 0);
 	}
 
-	public void releaseLock(Session session)
+	public void releaseLock(CqlSession session)
 	{
 		PreparedStatement ps = session.prepare(String.format("delete from %s.%s_lock where name = ? if exists",
 			config.getKeyspace(), config.getMetadataTable()));

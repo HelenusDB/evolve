@@ -11,18 +11,17 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.datastax.driver.core.Session;
+import com.datastax.oss.driver.api.core.CqlSession;
 import com.helenusdb.evolve.metadata.CassandraMetadataStrategy;
 import com.helenusdb.evolve.metadata.Metadata;
 import com.helenusdb.evolve.metadata.MetadataStrategy;
 
 /**
- * @author tfredrich
- *
+ * Manages the migration of a Cassandra database.
  */
-public class MigrationMaster
+public class HelenusDbEvolve
 {
-	private static final Logger LOG = LoggerFactory.getLogger(MigrationMaster.class);
+	private static final Logger LOG = LoggerFactory.getLogger(HelenusDbEvolve.class);
 
 	private static final int UNINITIALIZED = -1;
 
@@ -33,7 +32,7 @@ public class MigrationMaster
 	/**
 	 * Manage migrations using the default configuration.
 	 */
-	public MigrationMaster()
+	public HelenusDbEvolve()
 	{
 		this(new MigrationConfiguration());
 	}
@@ -43,7 +42,7 @@ public class MigrationMaster
 	 * 
 	 * @param configuration
 	 */
-	public MigrationMaster(MigrationConfiguration configuration)
+	public HelenusDbEvolve(MigrationConfiguration configuration)
 	{
 		super();
 		setConfiguration(configuration);
@@ -60,19 +59,19 @@ public class MigrationMaster
 		return configuration;
 	}
 
-	public MigrationMaster register(Migration migration)
+	public HelenusDbEvolve register(Migration migration)
 	{
 		migrations.add(migration);
 		return this;
 	}
 
-	public MigrationMaster registerAll(Collection<Migration> migrations)
+	public HelenusDbEvolve registerAll(Collection<Migration> migrations)
 	{
 		this.migrations.addAll(migrations);
 		return this;
 	}
 
-	public void migrate(final Session session)
+	public void migrate(final CqlSession session)
 	throws IOException
 	{
 		if (!acquireLock(session))
@@ -119,7 +118,7 @@ public class MigrationMaster
 		}
 	}
 
-	private void hold(Session session)
+	private void hold(CqlSession session)
 	{
 		do
 		{
@@ -138,17 +137,17 @@ public class MigrationMaster
 		while (metadata.isLocked(session));
 	}
 
-	private boolean acquireLock(Session session)
+	private boolean acquireLock(CqlSession session)
 	{
 		return metadata.acquireLock(session);
 	}
 
-	private void releaseLock(Session session)
+	private void releaseLock(CqlSession session)
 	{
 		metadata.releaseLock(session);
 	}
 
-	private boolean process(final Session session, final List<Migration> allMigrations, final int from, final int to)
+	private boolean process(final CqlSession session, final List<Migration> allMigrations, final int from, final int to)
 	{
 		for (Migration migration : allMigrations)
 		{
@@ -176,7 +175,7 @@ public class MigrationMaster
 		return new ClasspathMigrationLoader().load(configuration);
 	}
 
-	private int getCurrentVersion(Session session)
+	private int getCurrentVersion(CqlSession session)
 	{
 		if (!metadata.exists(session))
 		{
@@ -186,7 +185,7 @@ public class MigrationMaster
 		return metadata.getCurrentVersion(session);
 	}
 
-	private int initializeMetadata(Session session)
+	private int initializeMetadata(CqlSession session)
 	{
 		metadata.initialize(session);
 		return 0;

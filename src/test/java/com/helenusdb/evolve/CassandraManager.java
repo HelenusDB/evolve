@@ -7,8 +7,9 @@ import org.apache.thrift.transport.TTransportException;
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Metadata;
-import com.datastax.driver.core.Session;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.session.Session;
+import com.helenusdb.evolve.metadata.Metadata;
 
 /**
  * @author tfredrich
@@ -18,11 +19,11 @@ public class CassandraManager
 {
 	private static final CassandraManager INSTANCE = new CassandraManager();
 	private static final String LOCALHOST = "127.0.0.1";
-	private static final String KEYSPACE_NAME = "migrations_test";
+	private static final String KEYSPACE_NAME = "helenusdb_evolve_test";
 
 	private boolean isStarted;
 	private Cluster cluster;
-	private Session session;
+	private CqlSession session;
 	private Metadata metadata;
 
 	public static void start()
@@ -113,7 +114,7 @@ public class CassandraManager
 		isStarted = true;
 	}
 
-	private void initializeKeyspace(Session session)
+	private void initializeKeyspace(CqlSession session)
 	{
 		session.execute(String.format("create keyspace if not exists %s with replication = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 }", keyspace()));
 	}

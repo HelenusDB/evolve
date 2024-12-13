@@ -3,7 +3,7 @@ package com.helenusdb.evolve;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.datastax.driver.core.Session;
+import com.datastax.oss.driver.api.core.CqlSession;
 
 public class ScriptMigration
 extends AbstractMigration
@@ -27,7 +27,7 @@ extends AbstractMigration
 		this.script = script;
 	}
 
-	public boolean migrate(Session session)
+	public boolean migrate(CqlSession session)
 	{
 		try
 		{

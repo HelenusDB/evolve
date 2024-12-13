@@ -5,7 +5,7 @@ import java.util.Properties;
 public class MigrationConfiguration
 {
 	public static final String DEFAULT_SCRIPT_LOCATION = "/db/migrations";
-	private static final String DEFAULT_METADATA_TABLE = "migration_meta";
+	private static final String DEFAULT_METADATA_TABLE = "migration_metadata";
 	private static final String DEFAULT_METADATA_KEYSPACE = "migrations";
 
 	private static final String SCRIPT_LOCATION = "migration.script_location";
@@ -26,7 +26,7 @@ public class MigrationConfiguration
 	 * 
 	 * Supported properties file keys are:
 	 * migration.script_location (default is to use the classpath + /db/migrations)
-	 * migration.metadata_table (default is migration_meta)
+	 * migration.metadata_table (default is migration_metadata)
 	 * migration.metadata_keyspace (default is migrations)
 	 * 
 	 * @param properties

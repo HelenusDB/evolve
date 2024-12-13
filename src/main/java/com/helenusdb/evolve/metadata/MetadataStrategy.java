@@ -1,14 +1,14 @@
 package com.helenusdb.evolve.metadata;
 
-import com.datastax.driver.core.Session;
+import com.datastax.oss.driver.api.core.CqlSession;
 
 public interface MetadataStrategy
 {
-	public boolean exists(Session session);
-	public int getCurrentVersion(Session session);
-	public void initialize(Session session);
-	public void update(Session session, Metadata metadata);
-	public boolean acquireLock(Session session);
-	public boolean isLocked(Session session);
-	public void releaseLock(Session session);
+	public boolean exists(CqlSession session);
+	public int getCurrentVersion(CqlSession session);
+	public void initialize(CqlSession session);
+	public void update(CqlSession session, Metadata metadata);
+	public boolean acquireLock(CqlSession session);
+	public boolean isLocked(CqlSession session);
+	public void releaseLock(CqlSession session);
 }
