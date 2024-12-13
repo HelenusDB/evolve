@@ -10,7 +10,7 @@ Usage:
 
 By default, migration scripts (CQL files) exist in the /src/main/resources/db/migrations directory with a '.cql' suffix. The filenames must be in the form 001_description.cql (single underscore separates the integer version from the description) so that the version and description exist in the filename. For example:
 
-001_initial.cql
+file: **001_initial.cql**
 ```
 create table if not exists example.table (
 	name text,
